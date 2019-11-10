@@ -35,28 +35,28 @@ const storage = multer.diskStorage({
 })
 
 //INIT Upload.
-// const upload = multer({
-//     storage: storage,
-//     fileFilter : function(req, file, cb){
-//     checktypeofFile(file,cb)
-// }
-// }).single('image')
-
-
-
 const upload = multer({
-    storage: multerS3({
-      s3: s3,
-      bucket: 'animaladoption-app',
-      fileFilter: function (req, file, cb) {
-        cb(null, {fieldName: file.fieldname});
-        checktypeofFile(file,cb);
-      },
-      key: function (req, file, cb) {
-        cb(null, Date.now().toString())
-      }
-    })
-  }).single('image')
+    storage: storage,
+    fileFilter : function(req, file, cb){
+    checktypeofFile(file,cb)
+}
+}).single('image')
+
+
+
+// const upload = multer({
+//     storage: multerS3({
+//       s3: s3,
+//       bucket: 'animaladoption-app',
+//       fileFilter: function (req, file, cb) {
+//         cb(null, {fieldName: file.fieldname});
+//         checktypeofFile(file,cb);
+//       },
+//       key: function (req, file, cb) {
+//         cb(null, Date.now().toString())
+//       }
+//     })
+//   }).single('image')
 
 //Middleware to use Storage for Upload for Multer.
 app.use(upload)
