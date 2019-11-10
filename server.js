@@ -1,16 +1,22 @@
 // use dotenv to import configs from the .env file
+
 require('dotenv').config()
+
+var aws = require('aws-sdk')
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path')
 const multer = require('multer');
+const multerS3 = require('multer-s3')
 const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+
 // Configuration
 const PORT = process.env.PORT
 const mongoURI = process.env.MONGODB_URI
+
 
 const userController = require('./controllers/userController.js')
 const catController = require('./controllers/catController.js')
