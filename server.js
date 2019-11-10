@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const path = require('path')
 const multer = require('multer');
 const multerS3 = require('multer-s3')
+var s3 = new aws.S3({ /* ... */ })
 const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
@@ -25,6 +26,7 @@ const session = require('express-session');
 
 //SET Storage Engine
 const storage = multer.diskStorage({
+
     destination:'./public/uploads/', 
     filename: function(req,file,cb){
         cb(null,file.fieldname + '-' + Date.now() +
@@ -33,12 +35,28 @@ const storage = multer.diskStorage({
 })
 
 //INIT Upload.
+// const upload = multer({
+//     storage: storage,
+//     fileFilter : function(req, file, cb){
+//     checktypeofFile(file,cb)
+// }
+// }).single('image')
+
+
+
 const upload = multer({
-    storage: storage,
-    fileFilter : function(req, file, cb){
-    checktypeofFile(file,cb)
-}
-}).single('image')
+    storage: multerS3({
+      s3: s3,
+      bucket: 'animaladoption-app',
+      fileFilter: function (req, file, cb) {
+        cb(null, {fieldName: file.fieldname});
+        checktypeofFile(file,cb);
+      },
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString())
+      }
+    })
+  }).single('image')
 
 //Middleware to use Storage for Upload for Multer.
 app.use(upload)
