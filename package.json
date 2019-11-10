@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/adesegunadedeji/Animal-AdoptionApp#readme",
   "dependencies": {
-    "aws-sdk": "^2.568.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bs-custom-file-input": "^1.3.2",
+    "aws-sdk": "^2.568.0",
     "dotenv": "^8.0.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
