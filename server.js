@@ -53,33 +53,33 @@ var upload = multer({
         cb(null, Date.now().toString())
       }
     })
-  }).single('image')
+  })
 
 //Middleware to use Storage for Upload for Multer.
 // app.use(upload)
 
 
-//  Check to  make Sure File Matches image Extensions of jpg,png, jpeg 
-function checktypeofFile(file,cb){
+// //  Check to  make Sure File Matches image Extensions of jpg,png, jpeg 
+// function checktypeofFile(file,cb){
 
-    const fileTypes = /jpg|jpeg|gif|png/;//Types of Files Allowed
-    //Check extension Matches fileTypes
-    console.log(file);
+//     const fileTypes = /jpg|jpeg|gif|png/;//Types of Files Allowed
+//     //Check extension Matches fileTypes
+//     console.log(file);
     
-    const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
-    //console.log(extName);
+//     const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
+//     //console.log(extName);
 
-    //check MimeType
-    const mimeType = fileTypes.test(file.mimetype);
-    //console.log(mimeType);
+//     //check MimeType
+//     const mimeType = fileTypes.test(file.mimetype);
+//     //console.log(mimeType);
 
-    if(extName && mimeType){
-        return cb(null,true);
-    }
-    else {
-            cb("Error: Allows Image Files Only")
-        }
-}
+//     if(extName && mimeType){
+//         return cb(null,true);
+//     }
+//     else {
+//             cb("Error: Allows Image Files Only")
+//         }
+// }
 
 // Database config and connection
 mongoose.connect(mongoURI, { useNewUrlParser: true })
@@ -122,6 +122,10 @@ app.listen(process.env.PORT, () => {
     console.log('listening on port 3000');
   })
 
-  app.post('/upload', upload.array('photos', 3), function(req, res, next) {
-    res.send('Successfully uploaded ' + req.files.length + ' files!')
-  })
+  console.log("UPLOAD WHat th fuck are you????????",upload)
+
+  console.log("UPLOAD WHat th fuck are you????????",typeof(upload))
+
+//   app.post('/upload', upload.array('photos', 3), function(req, res, next) {
+//     res.send('Successfully uploaded ' + req.files.length + ' files!')
+//   })
