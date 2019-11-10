@@ -24,39 +24,36 @@ const catController = require('./controllers/catController.js')
 const dogController = require('./controllers/dogController.js')
 const session = require('express-session');
 
-//SET Storage Engine
-const storage = multer.diskStorage({
+// //SET Storage Engine
+// const storage = multer.diskStorage({
 
-    destination:'./public/uploads/', 
-    filename: function(req,file,cb){
-        cb(null,file.fieldname + '-' + Date.now() +
-         path.extname(file.originalname));
-    }
-})
+//     destination:'./public/uploads/', 
+//     filename: function(req,file,cb){
+//         cb(null,file.fieldname + '-' + Date.now() +
+//          path.extname(file.originalname));
+//     }
+// })
 
 //INIT Upload.
-const upload = multer({
-    storage: storage,
-    fileFilter : function(req, file, cb){
-    checktypeofFile(file,cb)
-}
-}).single('image')
-
-
-
 // const upload = multer({
-//     storage: multerS3({
-//       s3: s3,
-//       bucket: 'animaladoption-app',
-//       fileFilter: function (req, file, cb) {
-//         cb(null, {fieldName: file.fieldname});
-//         checktypeofFile(file,cb);
-//       },
-//       key: function (req, file, cb) {
-//         cb(null, Date.now().toString())
-//       }
-//     })
-//   }).single('image')
+//     storage: storage,
+//     fileFilter : function(req, file, cb){
+//     checktypeofFile(file,cb)
+// }
+// }).single('image')
+
+var upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'animaladoption-app',
+      fileFilter: function (req, file, cb) {
+        cb(null, {fieldName: file.fieldname});
+      },
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString())
+      }
+    })
+  }).single('image')
 
 //Middleware to use Storage for Upload for Multer.
 app.use(upload)
