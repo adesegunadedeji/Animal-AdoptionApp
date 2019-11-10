@@ -122,5 +122,6 @@ app.listen(process.env.PORT, () => {
     console.log('listening on port 3000');
   })
 
-
-
+  app.post('/upload', upload.array('photos', 3), function(req, res, next) {
+    res.send('Successfully uploaded ' + req.files.length + ' files!')
+  })
