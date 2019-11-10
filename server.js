@@ -56,7 +56,7 @@ var upload = multer({
   }).single('image')
 
 //Middleware to use Storage for Upload for Multer.
-app.use(upload)
+// app.use(upload)
 
 
 //  Check to  make Sure File Matches image Extensions of jpg,png, jpeg 
