@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-
 const Dog = require("../models/dogs.js");
+// const upload = require('../file-upload')
+// const singleUpload = upload.single('image');
 
 //INDEX ROUTE
 router.get("/", async(req,res)=>{
@@ -23,20 +24,30 @@ router.get("/new", (req, res) => {
     res.render("./dogs/new.ejs")
 })
     
-//CREATE ROUTE
+// CREATE ROUTE
 router.post('/', async(req, res) => {
     const dogImage = req.file.filename;
-    console.log(dogImage);
+    console.log(dogImage)
     try{
-        const newDog = await Dog.create({ name: req.body.name, breed:req.body.breed, age: req.body.age, gender: req.body.gender,description: req.body.description, image: dogImage, creator: res.locals.currentUser });
+        const newDog = await Dog.create({ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: dogImage, creator: res.locals.currentUser });
         res.redirect('/dogs'); 
     }
 catch(err){
     res.send(err);
     console.log(err);
 }
-    
 })
+
+// router.post('/uploadImages', function(req,res){
+//     singleUpload(req,res, function(err) {
+//         console.log("REQUEXT",req)
+//         console.log("REQ.FILE",req.file)
+//         console.log("REQ.FILE.location",req.file)
+//         return res.json({'imageUrl': req.file.location})
+//     })
+// })
+
+
 //SHOW ROUTE
 router.get("/:id", async(req, res) => {
     const foundDog = await Dog.findById(req.params.id)
