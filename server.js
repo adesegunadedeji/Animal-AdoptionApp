@@ -4,11 +4,13 @@ require('dotenv').config()
 const aws = require('aws-sdk')
 const multer = require('multer');
 const multerS3 = require('multer-s3')
-const s3 = new aws.S3();
+
 
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path')
+
+console.log(process.env.AWSSecretKey, "SECRET")
 
 aws.config.update({
     secretAccessKey: process.env.AWSSecretKey,
@@ -16,6 +18,7 @@ aws.config.update({
     region: "us-east-1"
 })
 
+const s3 = new aws.S3();
 // Configuration
 const PORT = process.env.PORT
 const mongoURI = process.env.MONGODB_URI
@@ -28,17 +31,36 @@ const methodOverride = require('method-override');
 
 
 
-// SET Storage Engine
+
 // const storage = multer.diskStorage({
 
 //     destination:'./public/uploads/', 
-    // filename: function(req,file,cb){
-    //     cb(null,file.fieldname + '-' + Date.now() +
-    //      path.extname(file.originalname));
-    // }
+//     filename: function(req,file,cb){
+//         cb(null,file.fieldname + '-' + Date.now() +
+//          path.extname(file.originalname));
+//     }
 // })
 
-// INIT Upload.
+
+
+
+// SET Storage Engine
+// const storage = multerS3({
+//   s3: s3,
+//   bucket: 'animaladoption-app',
+//   acl: 'public-read',
+//   metadata: function (req, file, cb) {
+//   cb(null, {fieldName: "Testing MetaData"});
+//     },
+//   key: function (req, file, cb){
+//   cb(null, Date.now().toString())},
+//   filename: function(req,file,cb){
+//   cb(null,file.fieldname + '-' + Date.now() +
+//          path.extname(file.originalname));
+//     }
+// })
+
+// // INIT Upload.
 // const upload = multer({
 //     storage: storage,
 //     fileFilter : function(req, file, cb){
@@ -46,8 +68,13 @@ const methodOverride = require('method-override');
 // }
 // }).single('image')
 
+// console.log(
+//     "##########################################################################################################################"
+//     , upload, 
+// "#########################################################################################")
 
-// const upload = multer({
+
+// const upload3= multer({
 //     storage: multerS3({
 //         s3: s3,
 //         bucket: 'animaladoption-app',
@@ -64,19 +91,23 @@ const methodOverride = require('method-override');
 
 const upload = multer({
     storage: multerS3({
+    destination:'./public/uploads/', 
       s3: s3,
       bucket: 'animaladoption-app',
       acl: 'public-read',
       metadata: function (req, file, cb) {
-        cb(null,{fieldName: "Testing_META_DATA"});
-        // cb(null, Object.assign({}, req.file));
-      },
-      filename: function(req,file,cb){
+        cb(null,{fieldName: file.originalname}); },
+      filename: function (req, file, cb) {
         cb(null,file.fieldname + '-' + Date.now() +
-         path.extname(file.originalname));
+        path.extname(file.originalname));
+   }
+    }),
+    fileFilter : function(req, file, cb){
+      checktypeofFile(file,cb)
     }
-    })
+   
   }).single('image')
+
 
 
 //Middleware to use Storage for Upload for Multer.
@@ -88,7 +119,7 @@ function checktypeofFile(file,cb){
 
     const fileTypes = /jpg|jpeg|gif|png/;//Types of Files Allowed
     //Check extension Matches fileTypes
-    console.log(file);
+    console.log("FILE",file);
     
     const extName = fileTypes.test(path.extname(file.originalname).toLowerCase());
     //console.log(extName);
@@ -110,7 +141,6 @@ function checktypeofFile(file,cb){
 const userController = require('./controllers/userController.js')
 const catController = require('./controllers/catController.js')
 const dogController = require('./controllers/dogController.js')
-// const fileRoutes = require('./controllers/file-upload.js')
 const session = require('express-session');
 
 
@@ -133,8 +163,9 @@ app.use(session({
 app.use(methodOverride('_method')); //For put and Delete
 
 //CREATE BODY PARSER
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(bodyParser.urlencoded({ extended: true }))
 
 //SESSIONS
 app.use((req, res,next)=>{
@@ -149,7 +180,7 @@ app.use('/dogs', dogController);
 
 app.use('/images', express.static('images'));
 app.use('/static', express.static('static'));
-// app.use('/public/uploads', express.static('public/uploads')); //For Images users will upload
+app.use('/public/uploads', express.static('public/uploads')); //For Images users will upload
 
 // routes
 app.get('/', (req, res) =>{
@@ -159,6 +190,12 @@ app.get('/', (req, res) =>{
 app.get('/about', (req, res)=>{
     res.render('about.ejs')
 })
+
+//open http://localhost:3000/ in browser to see upload form
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '/index.ejs');
+// });
+
 
 app.listen(process.env.PORT, () => {
 

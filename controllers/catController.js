@@ -7,7 +7,6 @@ router.get('/', async (req, res) =>{
     try {
         const cats = await Cats.find();
         res.render('./cats/index.ejs', {
-           // catImage : req.file.filename,
             cats : cats
         });
     }catch(err){
@@ -24,20 +23,20 @@ router.get('/new', (req, res) =>{
 })
 
 // CREATE/POST ROUTE
-// router.post('/', async (req, res)=>{
-//     const catImage = req.file.filename;
-//     console.log(catImage);
-//     try {
-//         const cat = await Cats.create({ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage, creator: res.locals.currentUser });
-//         //console.log(cat);
-//         console.log(res.locals.currentUser);
-//         res.redirect('/cats');
-//         //console.log(req.body);
-//     }catch(err){
-//         res.send(err)
-//         //console.log(err)
-//     }
-//  })
+router.post('/', async (req, res)=>{
+    const catImage = req.file
+    console.log(catImage);
+    try {
+        const cat = await Cats.create({ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage, creator: res.locals.currentUser });
+        //console.log(cat);
+        console.log(res.locals.currentUser);
+        res.redirect('/cats');
+        //console.log(req.body);
+    }catch(err){
+        res.send(err)
+        //console.log(err)
+    }
+ })
 
 
 
