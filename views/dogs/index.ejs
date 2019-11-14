@@ -18,7 +18,7 @@
             <%dogs.forEach(function(dog){%>
               <div id="image-block">
                   <a class="imageName" href="/dogs/<%=dog.id%>">
-                   <img src="../public/uploads/<%=dog.image%>" class="image"/>
+                   <img src="<%=dog.image%>" class="image"/>
                   <div class="divider"></div>
                   <%=dog.name %></a>
               </div>

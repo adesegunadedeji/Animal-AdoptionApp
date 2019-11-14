@@ -16,7 +16,8 @@
         <div class="container">
            <% cats.forEach(function(cat) {%>
               <div id="image-block">
-              <a  class="imageName" href="/cats/<%=cat._id %>"><img src="../public/uploads/<%=cat.image%>" class="image"/>
+              <a  class="imageName" href="/cats/<%=cat._id %>">
+               <img src="<%=cat.image%>" class="image"/>
               <div class="divider"></div>
               <%=cat.name%></a>
      </div>

@@ -5,9 +5,9 @@ const Cats = require('../models/cats.js');
 // INDEX ROUTE
 router.get('/', async (req, res) =>{
     try {
-        const cats = await Cats.find();
+        const allCats = await Cats.find();
         res.render('./cats/index.ejs', {
-            cats : cats
+            cats : allCats
         });
     }catch(err){
         console.log(err);
@@ -24,52 +24,40 @@ router.get('/new', (req, res) =>{
 
 // CREATE/POST ROUTE
 router.post('/', async (req, res)=>{
-    const catImage = req.file
+    const catImage = req.file.location
     console.log(catImage);
     try {
-        const cat = await Cats.create({ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage, creator: res.locals.currentUser });
-        //console.log(cat);
-        console.log(res.locals.currentUser);
+        const newCat = await Cats.create({ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage, creator: res.locals.currentUser });
         res.redirect('/cats');
-        //console.log(req.body);
-    }catch(err){
+        console.log("DOGIMAGE",newCat);
+    }
+    catch(err){
         res.send(err)
-        //console.log(err)
+        console.log(err)
     }
  })
-
-
-
-
 
  
 // SHOW ROUTE
 router.get('/:id', async (req, res) =>{
-    const cat = await Cats.findById(req.params.id);
-    //const catImage = await Cats.find(req.file.filename)
-    //console.log(cat);
-    console.log("REQ>SESSIONS CAT CONTROLLER",req.session)
-    console.log("CATS RES>LOCALS ",res.locals)
-    console.log("CATS IN SHOW ROUTE",cat)
+    const foundCat = await Cats.findById(req.params.id);
     res.render('./cats/show.ejs', {
-        cat : cat,
-        currentUser : res.locals.currentUser
+        oneCat: foundCat
     })
 })
 
 // EDIT ROUTE
 router.get('/:id/edit', async (req, res)=>{
-    const cat = await Cats.findById(req.params.id);
+    const foundCat = await Cats.findById(req.params.id);
     res.render('./cats/edit.ejs', {
-        catId : req.params.id,
-        cat : cat
+       oneCat: foundCat
     })
 })
 // UPDATE ROUTE
 router.put('/:id', async (req, res) =>{
-    const catImage = req.file.filename;
+    const catImage = req.file.location
     try{
-        const cats = await Cats.findByIdAndUpdate(req.params.id,{ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage }, {new: true}, );
+        const cats = await Cats.findByIdAndUpdate(req.params.id,{ name: req.body.name, age: req.body.age, gender: req.body.gender,description: req.body.description, image: catImage }, {new: true});
         console.log("CATS IN UPDATE ROUTE",cats);
         res.redirect('/cats');
     }catch(err){
@@ -78,8 +66,16 @@ router.put('/:id', async (req, res) =>{
 })
 // DELETE ROUTE
 router.delete('/:id', async (req, res) =>{
-    const cat = await Cats.findByIdAndDelete(req.params.id);
+
+    try{
+    const cat = await Cats.findByIdAndDelete({_id: req.params.id});
     res.redirect('/cats');
+}
+catch(err){
+    console.log(err);
+      res.send(err);
+  }
+
 })
 
 module.exports = router;

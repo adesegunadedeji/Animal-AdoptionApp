@@ -12,11 +12,11 @@
    <title>Your Dog</title>
 </head>
 <body>
-           <%- include ../partials/_navbar.ejs %>
+        <%- include ../partials/_navbar.ejs %>
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6">
-                <img id="pic" src="../public/uploads/<%=oneDog.image%>">
+            <img id="pic" src="<%=oneDog.image%>">
             </div>
             <div class="col-lg-6" id="data">
                 <h1 id="name"><%=oneDog.name%></h1>
@@ -24,7 +24,8 @@
                 <h2 >age: <%=oneDog.age%></h2>
                 <h2>breed: <%=oneDog.breed%></h2>
                 <h2>gender: <%=oneDog.gender%></h2>
-                <h3><br><div class="divider"></div><%=oneDog.description%></h3>
+                <h3><br><div class="divider"></div>
+                <%=oneDog.description%></h3>
             <% if(oneDog.creator == currentUser && currentUser !== undefined) { %>
                 <div id="buttons">
                     <form action="/dogs/<%= oneDog._id %>/edit">
@@ -38,7 +39,7 @@
             </div>
         </div>
     </div>    
-   
+
   <%- include ../partials/_footer.ejs %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>

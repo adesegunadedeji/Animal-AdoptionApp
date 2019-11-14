@@ -15,23 +15,23 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6">
-                <img id="pic" src="../public/uploads/<%=cat.image%>">
+                <img id="pic" src="<%=oneCat.image%>">
             </div>
             <div class="col-lg-6" id="data">
-                <h1 id="name"><%=cat.name%></h1>
+                <h1 id="name"><%=oneCat.name%></h1>
                 <div class="divider"></div>
-                <h2>age: <%=cat.age%></h2>
-                <h2>gender: <%=cat.gender%></h2>
+                <h2>age: <%=oneCat.age%></h2>
+                <h2>gender: <%=oneCat.gender%></h2>
                 <div class="divider"></div>
-                <h3><%=cat.description%></h3>
+                <h3><%=oneCat.description%></h3>
                 <div>
-                <% if(cat.creator == currentUser && currentUser !== undefined) { %>
+                <% if(oneCat.creator == currentUser && currentUser !== undefined) { %>
                     <div id="buttons">
-                    <form action="/cats/<%= cat._id %>/edit">
-                    <input class="btn btn-outline-secondary btn-xs" type="submit" value="Edit <%=cat.name%>">
+                    <form action="/cats/<%= oneCat._id %>/edit">
+                    <input class="btn btn-outline-secondary btn-xs" type="submit" value="EDIT <%=oneCat.name%>">
                     </form><br>
-                    <form action="/cats/<%= cat._id%>?_method=DELETE" method="POST">
-                    <input class="btn btn-outline-danger btn-xs" type="submit" value="Remove <%=cat.name%>">
+                    <form action="/cats/<%= oneCat._id%>?_method=DELETE" method="POST">
+                    <input class="btn btn-outline-danger btn-xs" type="submit" value="DELETE <%=oneCat.name%>">
                     </form>
                     </div>
                 <% } %>

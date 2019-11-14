@@ -28,67 +28,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
-
-
-
-
-// const storage = multer.diskStorage({
-
-//     destination:'./public/uploads/', 
-//     filename: function(req,file,cb){
-//         cb(null,file.fieldname + '-' + Date.now() +
-//          path.extname(file.originalname));
-//     }
-// })
-
-
-
-
-// SET Storage Engine
-// const storage = multerS3({
-//   s3: s3,
-//   bucket: 'animaladoption-app',
-//   acl: 'public-read',
-//   metadata: function (req, file, cb) {
-//   cb(null, {fieldName: "Testing MetaData"});
-//     },
-//   key: function (req, file, cb){
-//   cb(null, Date.now().toString())},
-//   filename: function(req,file,cb){
-//   cb(null,file.fieldname + '-' + Date.now() +
-//          path.extname(file.originalname));
-//     }
-// })
-
-// // INIT Upload.
-// const upload = multer({
-//     storage: storage,
-//     fileFilter : function(req, file, cb){
-//     checktypeofFile(file,cb)
-// }
-// }).single('image')
-
-// console.log(
-//     "##########################################################################################################################"
-//     , upload, 
-// "#########################################################################################")
-
-
-// const upload3= multer({
-//     storage: multerS3({
-//         s3: s3,
-//         bucket: 'animaladoption-app',
-//         acl: 'public-read',
-//         metadata: function (req, file, cb) {
-//         cb(null, {fieldName: "Testing MetaData"});
-//           },
-//           key: function (req, file, cb){
-//             cb(null, Date.now().toString())}
-//     }),
-//         fileFilter : function(req, file, cb){
-//         checktypeofFile(file,cb)}
-// }).single('image')
-
 const upload = multer({
     storage: multerS3({
     destination:'./public/uploads/', 
@@ -100,6 +39,7 @@ const upload = multer({
       filename: function (req, file, cb) {
         cb(null,file.fieldname + '-' + Date.now() +
         path.extname(file.originalname));
+        console.log(file.originalname)
    }
     }),
     fileFilter : function(req, file, cb){
